@@ -15,10 +15,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Extract Android project
-       run: |
-        unzip -o *.zip -d extracted
-        PROJECT_DIR="$(dirname "$(find extracted -name settings.gradle -print -quit)")"
-        cp -a "$PROJECT_DIR"/. .
+        run: |
+          unzip -o *.zip -d extracted
+          PROJECT_DIR="$(dirname "$(find extracted -name settings.gradle -print -quit)")"
+          cp -a "$PROJECT_DIR"/. .
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
