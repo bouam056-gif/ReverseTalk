@@ -15,10 +15,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Extract Android project
-        run: |
-          unzip -o *.zip -d extracted
-          PROJECT_DIR="$(dirname "$(find extracted -name settings.gradle -print -quit)")"
-          cp -a "$PROJECT_DIR"/. .
+       shell: bash
+       run: |
+        mkdir -p extracted
+        for archive in ./*.zip; do
+         [ -f "$archive" ] || continue
+         echo "Extracting $archive"
+         unzip -oq "$archive" -d extracted
+        done
+        settings_file=$(find extracted -name settings.gradle | head -n 1)
+        if [ -z "$settings_file" ]; then
+          echo "Project not found"
+          exit 1
+        fi
+        cp -a "$(dirname "$settings_file")"/. .
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
